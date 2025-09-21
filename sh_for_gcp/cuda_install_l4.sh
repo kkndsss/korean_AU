@@ -36,8 +36,19 @@ sudo apt-get install -y \
 sudo apt-get install -y cuda-toolkit-12-2
 
 # 환경 변수 설정
-echo 'export PATH=/usr/local/cuda-12.2/bin:$PATH' >> ~/.bashrc
-echo 'export LD_LIBRARY_PATH=/usr/local/cuda-12.2/lib64:$LD_LIBRARY_PATH' >> ~/.bashrc
+# 기존: echo 'export PATH=/usr/local/cuda-12.2/bin:$PATH' >> ~/.bashrc
+# 변경: append only if not already present
+if ! grep -q '/usr/local/cuda-12.2/bin' ~/.bashrc 2>/dev/null; then
+  echo 'export PATH=/usr/local/cuda-12.2/bin:$PATH' >> ~/.bashrc
+fi
+if ! grep -q '/usr/local/cuda-12.2/lib64' ~/.bashrc 2>/dev/null; then
+  echo 'export LD_LIBRARY_PATH=/usr/local/cuda-12.2/lib64:$LD_LIBRARY_PATH' >> ~/.bashrc
+fi
+
+# make nvcc available in the current running script (best-effort)
+export PATH="/usr/local/cuda-12.2/bin:$PATH"
+export LD_LIBRARY_PATH="/usr/local/cuda-12.2/lib64:${LD_LIBRARY_PATH:-}"
+hash -r || true
 
 # CUDA 버전 확인
 echo "=== 설치된 CUDA 버전 확인 ==="
@@ -49,4 +60,11 @@ nvidia-smi
 echo "=== L4 GPU 설치 완료 ==="
 echo "주의: 시스템 재부팅이 필요할 수 있습니다."
 echo "재부팅 후 'nvidia-smi' 명령어로 GPU 인식 확인하세요."
-sudo reboot
+# === conditional reboot block (replace unconditional "sudo reboot") ===
+if [ "${SKIP_REBOOT:-0}" = "1" ]; then
+  echo "SKIP_REBOOT=1 set -> not rebooting (caller will handle reboot)."
+else
+  echo "Rebooting to activate NVIDIA driver..."
+  sudo reboot
+fi
+# === end block ===
