@@ -48,11 +48,16 @@ if ! command -v pyenv &> /dev/null; then
     echo ""
     echo "==============================="
     echo "[안내] pyenv 설치가 완료되었습니다."
-    echo "곧 시스템이 자동으로 재부팅됩니다."
-    echo "재부팅 후, 다시 이 스크립트(full_install.sh)를 실행하면 남은 설정이 이어집니다."
+    echo ""
+    echo "아래 명령어를 복사해서 터미널에 붙여넣으세요:"
+    echo ""
+    echo "    source ~/.bashrc"
+    echo ""
+    echo "명령 입력 후, 반드시 다시 아래 명령을 실행하세요:"
+    echo ""
+    echo "    bash full_install.sh"
+    echo ""
     echo "==============================="
-    sleep 5
-    sudo reboot
     exit 0
 else
     echo "[확인] pyenv가 이미 설치되어 있습니다."
