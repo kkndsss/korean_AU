@@ -62,6 +62,8 @@ if ! command -v pyenv &> /dev/null; then
 else
     echo "[확인] pyenv가 이미 설치되어 있습니다."
 fi
+#pyenv 초기화로 반드시 쉘 재시작 필요 (source ~/.bashrc)
+
 
 # pyenv 환경변수 강제 적용 (중복 적용 무해)
 export PYENV_ROOT="$HOME/.pyenv"

@@ -9,3 +9,4 @@ pytorch-lightning==2.4.0
 scikit-learn==1.5.1
 transformers==4.43.0
 wandb==0.18.1
+huggingface_hub
